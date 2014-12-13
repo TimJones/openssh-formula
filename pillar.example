@@ -30,6 +30,15 @@ sshd_config:
   Subsystem: "sftp /usr/lib/openssh/sftp-server"
   UsePAM: 'yes'
   UseDNS: 'yes'
+  matches:
+    sftp_chroot:
+      type:
+        Group: sftpusers
+      options:
+        ChrootDirectory: /sftp-chroot/%u
+        X11Forwarding: no
+        AllowTcpForwarding: no
+        ForceCommand: internal-sftp
 
 openssh:
   auth:
@@ -49,8 +58,19 @@ openssh:
       -----END DSA PRIVATE KEY-----
     public_key: |
       ssh-dss NOT_DEFINED
+  ecdsa:
+    private_key: |
+      -----BEGIN EC PRIVATE KEY-----
+      NOT_DEFINED
+      -----END EC PRIVATE KEY-----
+    public_key: |
+      ecdsa-sha2-nistp256 NOT_DEFINED
   provide_dsa_keys: False
+  provide_ecdsa_keys: False
   provide_rsa_keys: False
+  generate_dsa_keys: False
+  generate_ecdsa_keys: False
+  generate_rsa_keys: False
   rsa:
     private_key: |
       -----BEGIN RSA PRIVATE KEY-----
